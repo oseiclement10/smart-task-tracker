@@ -3,7 +3,7 @@ package models.tasks;
 import models.tasks.enums.TaskStatus;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
+import java.util.Comparator;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -47,5 +47,9 @@ public class TaskManager<T extends Task> {
         Pattern pattern = Pattern.compile(searchInput, Pattern.CASE_INSENSITIVE);
         return this.tasks.stream().filter(task -> pattern.matcher(task.getTitle()).find())
                 .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public void sort(Comparator<T> comparator){
+         this.tasks.sort(comparator);
     }
 }
