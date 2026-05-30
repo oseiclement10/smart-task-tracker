@@ -1,5 +1,4 @@
-import models.tasks.*;
-import models.tasks.enums.PriorityLevel;
+import console.ConsoleUI;
 
 void main() {
     IO.println("Welcome to Smart Task tracker !");

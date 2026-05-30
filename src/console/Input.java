@@ -37,4 +37,25 @@ public class Input {
     }
 
 
+    public String getStringInput(String fieldName, String validatingRegex, String patternDesc) {
+
+        while (true) {
+            String input = this.scanner.nextLine().trim();
+
+            Optional<String> validationError = InputValidator.validateNotEmpty(input, fieldName);
+
+            if (validationError.isEmpty()) {
+                validationError = InputValidator.validateByPattern(input, validatingRegex, patternDesc);
+                if (validationError.isEmpty()) {
+                    return input;
+                }
+            }
+
+            output.printMessage(validationError.get());
+
+        }
+
+    }
+
+
 }

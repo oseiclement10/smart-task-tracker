@@ -1,5 +1,5 @@
-import console.Input;
-import console.Output;
+package console;
+
 import models.tasks.Task;
 import models.tasks.TaskManager;
 
@@ -60,6 +60,10 @@ public class ConsoleUI {
             case 4:
                 break;
         }
+    }
+
+    private void printAddTaskSubMenu(){
+
     }
 
     private void loadMainMenu() {
