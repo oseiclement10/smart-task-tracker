@@ -9,12 +9,12 @@ import java.time.temporal.ChronoUnit;
 public class DeadlineTask extends Task {
 
     LocalDate dueDate;
-    boolean recurring;
 
-    public DeadlineTask(String title, String description, PriorityLevel priority, String dueDate, boolean isRecurring) {
+
+    public DeadlineTask(String title, String description, PriorityLevel priority, String dueDate) {
         super(title, description, priority);
         this.dueDate = this.stringToDate(dueDate);
-        this.recurring = isRecurring;
+
     }
 
     @Override

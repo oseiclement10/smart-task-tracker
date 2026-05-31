@@ -13,16 +13,17 @@ public class Input {
         this.output = output;
     }
 
-    public int getIntInput(String validatingRegex, String patternDesc) {
+    public int getIntInput(String label, String validatingRegex, String errorMessage) {
 
         while (true) {
+            output.printMessage(label);
             String input = this.scanner.nextLine().trim();
             try {
                 int value = Integer.parseInt(input);
                 Optional<String> validationError = InputValidator.validateByPattern(
                         input,
                         validatingRegex,
-                        patternDesc
+                        errorMessage
                 );
                 if (validationError.isEmpty()) {
                     return value;
@@ -37,15 +38,16 @@ public class Input {
     }
 
 
-    public String getStringInput(String fieldName, String validatingRegex, String patternDesc) {
+    public String getStringInput(String fieldName, String label, String validatingRegex, String errorMessage) {
 
         while (true) {
+            output.printMessage(label);
             String input = this.scanner.nextLine().trim();
 
             Optional<String> validationError = InputValidator.validateNotEmpty(input, fieldName);
 
             if (validationError.isEmpty()) {
-                validationError = InputValidator.validateByPattern(input, validatingRegex, patternDesc);
+                validationError = InputValidator.validateByPattern(input, validatingRegex, errorMessage);
                 if (validationError.isEmpty()) {
                     return input;
                 }

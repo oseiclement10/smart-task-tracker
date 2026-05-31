@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 public class InputValidator {
 
 
-    public static Optional<String> validateByPattern(String input, String regexPattern, String patternDesc) {
+    public static Optional<String> validateByPattern(String input, String regexPattern, String errorMesage) {
         Pattern pattern = Pattern.compile(regexPattern);
         Matcher matcher = pattern.matcher(input);
 
@@ -17,7 +17,7 @@ public class InputValidator {
             return Optional.empty();
         }
 
-        return Optional.of("Invalid input. Expected format " + patternDesc);
+        return Optional.of(errorMesage);
     }
 
     public static Optional<String> validateDateInput(String dateInput) {

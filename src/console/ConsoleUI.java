@@ -11,19 +11,23 @@ public class ConsoleUI {
     public Map<Integer, String> menu;
     private final Input input;
     private final Output output;
-    private final TaskManager<Task> taskManager;
+    private final TaskManager taskManager;
 
     public ConsoleUI() {
         this.output = new Output();
         this.input = new Input(this.output);
         this.loadMainMenu();
-        this.taskManager = new TaskManager<>();
+        this.taskManager = new TaskManager();
     }
 
     public void main() {
         while (true) {
             printMainMenu();
-            int menuOptionSelected = readEnteredMenuOption();
+            int menuOptionSelected = this.input.getIntInput("Enter your choice : ",
+                    "[0-4]",
+                    "from 0 to 4"
+            );
+
             if (menuOptionSelected == 0) {
                 this.output.printMessage("Exiting application .... ");
                 return;
@@ -39,21 +43,16 @@ public class ConsoleUI {
             this.output.printMessage(key + ". " + value);
         });
         this.output.printMessage("==============================================");
-        this.output.printMessage("Enter your choice : ");
     }
 
-    private int readEnteredMenuOption() {
-        return this.input.getIntInput("[0-4]", "from 0 to 4");
-    }
 
     private void handleUserSelection(int menuOption) {
         switch (menuOption) {
             case 1:
+                this.taskManager.runCreateTask(this.input, this.output);
                 break;
             case 2:
-                this.output.printTaskList(
-                        this.taskManager.getAll()
-                );
+                this.output.printTaskList(this.taskManager.getAll());
                 break;
             case 3:
                 break;
@@ -62,9 +61,7 @@ public class ConsoleUI {
         }
     }
 
-    private void printAddTaskSubMenu(){
 
-    }
 
     private void loadMainMenu() {
         menu = new LinkedHashMap<>();

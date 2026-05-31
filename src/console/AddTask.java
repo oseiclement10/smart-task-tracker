@@ -1,7 +1,15 @@
 package console;
 
+import models.tasks.DeadlineTask;
+import models.tasks.RecurringTask;
+import models.tasks.SimpleTask;
+import models.tasks.Task;
+import models.tasks.enums.PriorityLevel;
+import models.tasks.enums.TaskType;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class AddTask {
     private final Input input;
@@ -12,49 +20,103 @@ public class AddTask {
         this.output = outputHandler;
     }
 
-    public void run() {
+    public void run(Consumer<Task> onTaskCreated) {
         while (true) {
             printOptions();
-            int menuOptionSelected = readEnteredMenuOption();
+            int menuOptionSelected = this.input.getIntInput(
+                    "Enter your choice : (1,2,3) ",
+                    "[0-3]",
+                    "input must be from 0 to 3"
+            );
             if (menuOptionSelected == 0) {
                 this.output.printMessage("Going back to main menu .... ");
                 return;
             }
-            this.handleUserSelection(menuOptionSelected);
+
+            boolean continueCreating = this.handleUserSelection(menuOptionSelected, onTaskCreated);
+            if (!continueCreating) {
+                output.printMessage("exiting ...");
+                return;
+            }
+
         }
+
+
     }
 
-    private void getTaskInfo(){
-        String name = input.getStringInput(
+    private Task createTask(TaskType taskType) {
+        String dueDate = "";
+        int recurringDays = 0;
+
+        String title = input.getStringInput(
                 "Title",
-                "(?=.*[A-Za-z])[A-Za-z0-9]{4,}$",
-                "Must be a valid title, ie contain at least 4 characters and not all numbers"
+                "Enter title of task : ",
+                "[A-Za-z0-9 ]{4,}$",
+                "Title must contain only letters and numbers and be at least 4 characters long."
         );
 
         String description = input.getStringInput(
                 "Description",
-                "[A-Za-z0-9]{4,}$",
-                "Must be a valid word ie contain at least 4 characters "
+                "Enter description of tasks : ",
+                "[A-Za-z0-9 ]{4,}$",
+                "Description must contain only letters and numbers and be at least 4 characters long."
         );
 
+        String priorityStr = input.getStringInput(
+                "Priority (high or low or medium)",
+                "Enter priority (high or low or medium) ",
+                "^(high)|(low)|(medium)$",
+                "Priority Must be either high, low or medium "
+        );
 
-    }
+        PriorityLevel priority = PriorityLevel.valueOf(priorityStr.toUpperCase());
 
-    private int readEnteredMenuOption() {
-        return this.input.getIntInput("[0-3]", "from 0 to 3");
-    }
+        if (taskType == TaskType.DEADLINE || taskType == TaskType.RECURRING) {
+            dueDate = input.getStringInput(
+                    "Due date",
+                    "Enter Due date here , must be in the format (yyyy-MM-dd)",
+                    "[0-9]{4}-[0-9]{2}-[0-9]{2}",
+                    "yyyy-mm-dd"
+            );
+        }
 
-    private void handleUserSelection(int menuOption) {
-        switch (menuOption) {
-            case 1:
-                break;
-            case 2:
+        if (taskType == TaskType.RECURRING) {
 
-                break;
-            case 3:
-                break;
+            recurringDays = input.getIntInput(
+                    "Enter number of days it takes to reoccur",
+                    "^[1-9]+",
+                    "Must be a number"
+            );
 
         }
+
+        return switch (taskType) {
+            case TaskType.SIMPLE -> new SimpleTask(title, description, priority);
+            case TaskType.DEADLINE -> new DeadlineTask(title, description, priority, dueDate);
+            case TaskType.RECURRING -> new RecurringTask(title, description, priority, dueDate, recurringDays);
+        };
+
+
+    }
+
+
+    private boolean handleUserSelection(int menuOption, Consumer<Task> onTaskCreated) {
+        switch (menuOption) {
+            case 1 -> onTaskCreated.accept(createTask(TaskType.SIMPLE));
+            case 2 -> onTaskCreated.accept(createTask(TaskType.DEADLINE));
+            case 3 -> onTaskCreated.accept(createTask(TaskType.RECURRING));
+        }
+
+
+        String continueCreating = input.getStringInput(
+                "Option",
+                "Would you like to create more Tasks ? Reply with yes or no",
+                "^(yes)|(no)$",
+                "Answer must be yes or no"
+        );
+
+        return continueCreating.equals("yes");
+
     }
 
 
@@ -68,7 +130,7 @@ public class AddTask {
         });
 
         this.output.printMessage("==============================");
-        this.output.printMessage("Enter your choice : ");
+
     }
 
 

@@ -1,5 +1,8 @@
 package models.tasks;
 
+import console.AddTask;
+import console.Input;
+import console.Output;
 import models.tasks.enums.TaskStatus;
 
 import java.util.ArrayList;
@@ -7,32 +10,37 @@ import java.util.Comparator;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class TaskManager<T extends Task> {
-    ArrayList<T> tasks;
+public class TaskManager {
+    ArrayList<Task> tasks;
 
     public TaskManager() {
         this.tasks = new ArrayList<>();
     }
 
-    public void addTask(T task) {
+    public void runCreateTask(Input input, Output output){
+        AddTask taskCreator = new AddTask(input,output);
+        taskCreator.run(this::addTask);
+    }
+
+    public void addTask(Task task) {
         tasks.add(task);
     }
 
-    public void removeTask(T task) {
+    public void removeTask(Task task) {
         tasks.remove(task);
     }
 
-    public ArrayList<T> getAll() {
+    public ArrayList<Task> getAll() {
         return this.tasks;
     }
 
-    public ArrayList<T> filterByStatus(TaskStatus status) {
+    public ArrayList<Task> filterByStatus(TaskStatus status) {
         return this.tasks.stream()
                 .filter(task -> task.status == status)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public ArrayList<T> filterByTag(String tag) {
+    public ArrayList<Task> filterByTag(String tag) {
         return this.tasks.stream()
                 .filter(task -> {
                     if (task instanceof SimpleTask) {
@@ -43,13 +51,13 @@ public class TaskManager<T extends Task> {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public ArrayList<T> searchByRegex(String searchInput) {
+    public ArrayList<Task> searchByRegex(String searchInput) {
         Pattern pattern = Pattern.compile(searchInput, Pattern.CASE_INSENSITIVE);
         return this.tasks.stream().filter(task -> pattern.matcher(task.getTitle()).find())
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public void sort(Comparator<T> comparator){
-         this.tasks.sort(comparator);
+    public void sort(Comparator<Task> comparator) {
+        this.tasks.sort(comparator);
     }
 }
