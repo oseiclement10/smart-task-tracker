@@ -19,12 +19,16 @@ public class Output {
     public void printTaskList(ArrayList<Task> tasks) {
         if (tasks.isEmpty()) {
             this.printMessage("No tasks available");
+            this.printMessage("");
             return;
         }
         this.printMessage("============TASKS LIST ===============");
-        for (int i = 0; i < tasks.size(); i++) {
-            this.printMessage((i + 1) + " . " + tasks.get(i));
+        this.printMessage(" ID  | TASK ");
+        this.printMessage("__________________________");
+        for (Task task : tasks) {
+            this.printMessage(" " + (task.getId()) + "   | " + task);
         }
-        this.printMessage("======================================");
+        this.printMessage("__________________________");
+        this.printMessage(" ");
     }
 }

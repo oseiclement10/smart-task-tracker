@@ -4,8 +4,8 @@ import models.tasks.DeadlineTask;
 import models.tasks.RecurringTask;
 import models.tasks.SimpleTask;
 import models.tasks.Task;
-import models.tasks.enums.PriorityLevel;
-import models.tasks.enums.TaskType;
+import enums.PriorityLevel;
+import enums.TaskType;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -107,6 +107,7 @@ public class AddTask {
             case 3 -> onTaskCreated.accept(createTask(TaskType.RECURRING));
         }
 
+        output.printMessage("Task Created Successfully !!! ");
 
         String continueCreating = input.getStringInput(
                 "Option",

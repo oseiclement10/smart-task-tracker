@@ -1,7 +1,7 @@
 package models.tasks;
 
-import models.tasks.enums.PriorityLevel;
-import models.tasks.enums.TaskStatus;
+import enums.PriorityLevel;
+import enums.TaskStatus;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -28,6 +28,10 @@ abstract public class Task {
 
 
     abstract public PriorityLevel getPriority();
+
+    public UUID getId() {
+        return id;
+    }
 
     public String getTitle(){
         return this.title;

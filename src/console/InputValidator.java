@@ -1,6 +1,6 @@
 package console;
 
-import models.tasks.enums.PriorityLevel;
+import enums.PriorityLevel;
 
 import java.util.Optional;
 import java.util.regex.Matcher;

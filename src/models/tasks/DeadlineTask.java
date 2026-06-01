@@ -1,6 +1,6 @@
 package models.tasks;
 
-import models.tasks.enums.PriorityLevel;
+import enums.PriorityLevel;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

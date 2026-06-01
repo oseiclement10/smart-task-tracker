@@ -17,7 +17,7 @@ public class ConsoleUI {
         this.output = new Output();
         this.input = new Input(this.output);
         this.loadMainMenu();
-        this.taskManager = new TaskManager();
+        this.taskManager = new TaskManager(input, output);
     }
 
     public void main() {
@@ -49,12 +49,13 @@ public class ConsoleUI {
     private void handleUserSelection(int menuOption) {
         switch (menuOption) {
             case 1:
-                this.taskManager.runCreateTask(this.input, this.output);
+                this.taskManager.runCreateTask();
                 break;
             case 2:
-                this.output.printTaskList(this.taskManager.getAll());
+                this.taskManager.printTasksList();
                 break;
             case 3:
+                this.taskManager.runDeleteTasks();
                 break;
             case 4:
                 break;
@@ -62,11 +63,11 @@ public class ConsoleUI {
     }
 
 
-
     private void loadMainMenu() {
         menu = new LinkedHashMap<>();
         menu.put(1, "Add Task");
         menu.put(2, "View Tasks");
+        // TODO:: Impelement sorting and editing
         menu.put(3, "Delete Tasks");
         menu.put(4, "Export Tasks");
         menu.put(0, "Exit");

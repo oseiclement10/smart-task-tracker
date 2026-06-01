@@ -1,4 +1,4 @@
-package models.tasks.enums;
+package enums;
 
 public enum PriorityLevel {
     HIGH,

@@ -1,8 +1,6 @@
 package models.tasks;
 
-import models.tasks.enums.PriorityLevel;
-
-import java.time.LocalDate;
+import enums.PriorityLevel;
 
 public class RecurringTask extends  DeadlineTask{
     int recurrenceIntervalDays;

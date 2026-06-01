@@ -1,25 +1,41 @@
 package models.tasks;
 
 import console.AddTask;
+import console.DeleteTask;
 import console.Input;
 import console.Output;
-import models.tasks.enums.TaskStatus;
+import enums.TaskStatus;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class TaskManager {
     ArrayList<Task> tasks;
+    private final Input input;
+    private final Output output;
 
-    public TaskManager() {
+    public TaskManager(Input inputHandler, Output outputHandler) {
+
         this.tasks = new ArrayList<>();
+        this.input = inputHandler;
+        this.output = outputHandler;
     }
 
-    public void runCreateTask(Input input, Output output){
-        AddTask taskCreator = new AddTask(input,output);
+    public void runCreateTask() {
+        AddTask taskCreator = new AddTask(this.input, this.output);
         taskCreator.run(this::addTask);
+    }
+
+    public void printTasksList() {
+        this.output.printTaskList(this.tasks);
+    }
+
+    public void runDeleteTasks() {
+        DeleteTask taskDeleter = new DeleteTask(this.input, this.output);
+        taskDeleter.run(this::bulkRemoveTasks, this.tasks);
     }
 
     public void addTask(Task task) {
@@ -28,6 +44,10 @@ public class TaskManager {
 
     public void removeTask(Task task) {
         tasks.remove(task);
+    }
+
+    public void bulkRemoveTasks(int[] taskIndexes) {
+        Arrays.stream(taskIndexes).forEach(taskIndex -> this.tasks.remove(taskIndex - 1));
     }
 
     public ArrayList<Task> getAll() {
