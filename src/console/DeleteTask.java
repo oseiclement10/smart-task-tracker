@@ -8,11 +8,9 @@ import models.tasks.Task;
 import enums.PriorityLevel;
 import enums.TaskType;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class DeleteTask {
     private final Input input;
@@ -50,18 +48,18 @@ public class DeleteTask {
     private int[] deleteTask(DeleteOption deleteOption, ArrayList<Task> tasks) {
         this.output.printTaskList(tasks);
 
+        Set<Integer> validTasks = tasks.stream().map(Task::getId).collect(Collectors.toSet());
+
         if (deleteOption == DeleteOption.SINGLE) {
             while (true) {
-                int taskIndex = input.getIntInput(
+                int taskId = input.getIntInput(
                         "Enter id of task you wish to delete : ",
                         "^[1-9]+$",
                         "id must be a number"
                 );
 
-                Task taskToDelete = tasks.get(taskIndex - 1);
-
-                if (taskToDelete != null) {
-                    return new int[]{taskIndex};
+                if (validTasks.contains(taskId)) {
+                    return new int[]{taskId};
                 }
 
                 output.printMessage("ID entered is not valid. Please enter a valid id ");
@@ -72,21 +70,19 @@ public class DeleteTask {
 
         if (deleteOption == DeleteOption.BULK) {
             while (true) {
-                String taskIndexes = input.getStringInput(
+                String taskIdsToDelete = input.getStringInput(
                         "Task IDS",
                         "Enter id(s) of tasks you wish to delete separated by a comma eg, 12,13 : ",
-                        "^([1-9]+,)+$",
-                        "id must be a number"
+                        "^([1-9,]+)+$",
+                        "ids must be number"
                 );
 
-                int[] indexes = Arrays.stream(taskIndexes.split(","))
+                int[] tasksToDeleteIds = Arrays.stream(taskIdsToDelete.split(","))
                         .mapToInt(Integer::parseInt)
                         .toArray();
 
-                boolean allValid = Arrays.stream(indexes).allMatch(id -> id >= 1 && id <= tasks.size());
-
-                if (allValid) {
-                    return indexes;
+                if (Arrays.stream(tasksToDeleteIds).allMatch(validTasks::contains)) {
+                    return tasksToDeleteIds;
                 }
 
                 output.printMessage("IDs entered are not valid . Please ensure that all ids are valid ");

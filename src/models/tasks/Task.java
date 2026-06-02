@@ -4,40 +4,43 @@ import enums.PriorityLevel;
 import enums.TaskStatus;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 abstract public class Task {
-    UUID id;
+
+    private static int nextId = 1;
+
+    int id;
     String title;
     String description;
     LocalDate createdAt;
     TaskStatus status;
     PriorityLevel priority;
 
-
-
-
     Task(String title, String description, PriorityLevel priority) {
-        this.id = UUID.randomUUID();
+        this.id = nextId;
         this.title = title;
         this.description = description;
         this.createdAt = LocalDate.now();
         this.status = TaskStatus.TODO;
         this.priority = priority;
+        nextId++;
     }
 
+    public static void setNextId(int nextId) {
+        Task.nextId = nextId;
+    }
 
     abstract public PriorityLevel getPriority();
 
-    public UUID getId() {
+    public int getId() {
         return id;
     }
 
-    public String getTitle(){
+    public String getTitle() {
         return this.title;
     }
 
-    public String toString(){
+    public String toString() {
         return this.title + " priority of " + this.priority.toString();
     }
 }

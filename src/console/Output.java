@@ -23,6 +23,7 @@ public class Output {
             return;
         }
         this.printMessage("============TASKS LIST ===============");
+        this.printMessage(" ");
         this.printMessage(" ID  | TASK ");
         this.printMessage("__________________________");
         for (Task task : tasks) {

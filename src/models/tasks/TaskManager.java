@@ -9,6 +9,7 @@ import enums.TaskStatus;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -46,8 +47,9 @@ public class TaskManager {
         tasks.remove(task);
     }
 
-    public void bulkRemoveTasks(int[] taskIndexes) {
-        Arrays.stream(taskIndexes).forEach(taskIndex -> this.tasks.remove(taskIndex - 1));
+    public void bulkRemoveTasks(int[] taskIds) {
+        Set<Integer> idsToDelete = Arrays.stream(taskIds).boxed().collect(Collectors.toSet());
+        this.tasks.removeIf(t -> idsToDelete.contains(t.getId()));
     }
 
     public ArrayList<Task> getAll() {
