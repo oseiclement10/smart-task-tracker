@@ -11,6 +11,6 @@ public class RecurringTask extends  DeadlineTask{
      }
 
      public void advanceToNextOccurrence(){
-        this.dueDate = this.dueDate.plusDays(this.recurrenceIntervalDays);
+        this.setDueDate(this.getDueDate().plusDays(this.recurrenceIntervalDays));
      }
 }

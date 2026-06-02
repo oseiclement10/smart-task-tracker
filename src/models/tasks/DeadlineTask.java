@@ -8,13 +8,21 @@ import java.time.temporal.ChronoUnit;
 
 public class DeadlineTask extends Task {
 
-    LocalDate dueDate;
+    private LocalDate dueDate;
 
 
     public DeadlineTask(String title, String description, PriorityLevel priority, String dueDate) {
         super(title, description, priority);
         this.dueDate = this.stringToDate(dueDate);
 
+    }
+
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
     }
 
     @Override
@@ -28,10 +36,8 @@ public class DeadlineTask extends Task {
         return this.priority;
     }
 
-    @Override
-    public String toString(){
-        String defaultStr = super.toString();
-        return defaultStr + " due at " + this.dueDate;
+    public String getDueDateToString() {
+        return dueDate.toString();
     }
 
     private LocalDate stringToDate(String dateInput) {

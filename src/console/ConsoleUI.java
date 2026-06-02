@@ -1,5 +1,6 @@
 package console;
 
+import apps.Reminder;
 import apps.TaskManager;
 
 import java.util.LinkedHashMap;
@@ -11,6 +12,7 @@ public class ConsoleUI {
     private final Input input;
     private final Output output;
     private final TaskManager taskManager;
+    private final Reminder reminder;
 
     public ConsoleUI() {
         this.output = new Output();
@@ -18,6 +20,11 @@ public class ConsoleUI {
         this.loadMainMenu();
         this.taskManager = new TaskManager(input, output);
         this.taskManager.load();
+        this.reminder = new Reminder(taskManager,output);
+    }
+
+    public void startReminder(){
+        this.reminder.activate();
     }
 
     public void main() {

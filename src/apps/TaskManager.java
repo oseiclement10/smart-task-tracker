@@ -56,8 +56,8 @@ public class TaskManager {
         this.tasks.removeIf(t -> idsToDelete.contains(t.getId()));
     }
 
-    public ArrayList<Task> getAll() {
-        return this.tasks;
+    public synchronized ArrayList<Task> getAll() {
+        return new ArrayList<>(this.tasks);
     }
 
     public ArrayList<Task> filterByStatus(TaskStatus status) {
@@ -96,4 +96,6 @@ public class TaskManager {
         this.tasks = storedTasks;
         Task.setNextId(storedTasks.isEmpty() ? 1 : storedTasks.size() + 1);
     }
+
+
 }

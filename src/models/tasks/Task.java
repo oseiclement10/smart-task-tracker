@@ -42,6 +42,8 @@ abstract public class Task implements Serializable {
     }
 
     public String toString() {
-        return this.title + " priority of " + this.priority.toString();
+        return this.title ;
     }
+
+
 }

@@ -1,5 +1,6 @@
 package console;
 
+import models.tasks.DeadlineTask;
 import models.tasks.Task;
 
 import java.io.PrintStream;
@@ -24,10 +25,10 @@ public class Output {
         }
         this.printMessage("============TASKS LIST ===============");
         this.printMessage(" ");
-        this.printMessage(" ID  | TASK ");
+        this.printMessage(" ID  | TASK | PRIORITY | DEADLINE |  ");
         this.printMessage("__________________________");
         for (Task task : tasks) {
-            this.printMessage(" " + (task.getId()) + "   | " + task);
+            this.printMessage(" " + (task.getId()) + "   | " + task + "    | " + task.getPriority() ) ;
         }
         this.printMessage("__________________________");
         this.printMessage(" ");
