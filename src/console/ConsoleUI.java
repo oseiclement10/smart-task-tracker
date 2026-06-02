@@ -60,7 +60,7 @@ public class ConsoleUI {
                 this.taskManager.runCreateTask();
                 break;
             case 2:
-                this.taskManager.printTasksList();
+                this.taskManager.runViewTasks();
                 break;
             case 3:
                 this.taskManager.runDeleteTasks();

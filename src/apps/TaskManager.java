@@ -1,9 +1,6 @@
 package apps;
 
-import console.AddTask;
-import console.DeleteTask;
-import console.Input;
-import console.Output;
+import console.*;
 import enums.TaskStatus;
 import models.tasks.SimpleTask;
 import models.tasks.Task;
@@ -34,8 +31,9 @@ public class TaskManager {
         taskCreator.run(this::addTask);
     }
 
-    public void printTasksList() {
-        this.output.printTaskList(this.tasks);
+    public void runViewTasks() {
+        ViewTask viewTaskRunner = new ViewTask(this.input, this.output, this);
+        viewTaskRunner.run();
     }
 
     public void runDeleteTasks() {
@@ -47,9 +45,6 @@ public class TaskManager {
         tasks.add(task);
     }
 
-    public void removeTask(Task task) {
-        tasks.remove(task);
-    }
 
     public void bulkRemoveTasks(int[] taskIds) {
         Set<Integer> idsToDelete = Arrays.stream(taskIds).boxed().collect(Collectors.toSet());

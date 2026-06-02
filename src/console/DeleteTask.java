@@ -1,13 +1,7 @@
 package console;
 
 import enums.DeleteOption;
-import models.tasks.DeadlineTask;
-import models.tasks.RecurringTask;
-import models.tasks.SimpleTask;
 import models.tasks.Task;
-import enums.PriorityLevel;
-import enums.TaskType;
-
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -46,7 +40,7 @@ public class DeleteTask {
     }
 
     private int[] deleteTask(DeleteOption deleteOption, ArrayList<Task> tasks) {
-        this.output.printTaskList(tasks);
+        this.output.printTaskList(tasks, "No Tasks found",null);
 
         Set<Integer> validTasks = tasks.stream().map(Task::getId).collect(Collectors.toSet());
 

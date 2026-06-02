@@ -13,7 +13,7 @@ abstract public class Task implements Serializable {
     int id;
     String title;
     String description;
-    LocalDate createdAt;
+    private LocalDate createdAt;
     public TaskStatus status;
     PriorityLevel priority;
 
@@ -43,6 +43,10 @@ abstract public class Task implements Serializable {
 
     public String toString() {
         return this.title ;
+    }
+
+    public String getCreatedAt(){
+        return this.createdAt.toString();
     }
 
 

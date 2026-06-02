@@ -17,18 +17,24 @@ public class Output {
         out.println(message);
     }
 
-    public void printTaskList(ArrayList<Task> tasks) {
+    public void printTaskList(ArrayList<Task> tasks, String emptyMessage, String headerMessage) {
         if (tasks.isEmpty()) {
-            this.printMessage("No tasks available");
+            this.printMessage(emptyMessage);
             this.printMessage("");
             return;
         }
-        this.printMessage("============TASKS LIST ===============");
+
+        if (headerMessage != null && !headerMessage.isEmpty()) {
+            this.printMessage(headerMessage);
+        }
+
+        this.printMessage("============ TASKS LIST ===============");
         this.printMessage(" ");
-        this.printMessage(" ID  | TASK | PRIORITY | DEADLINE |  ");
+        this.printMessage(" ID  | TASK                      | PRIORITY | DEADLINE |  CREATED AT");
         this.printMessage("__________________________");
         for (Task task : tasks) {
-            this.printMessage(" " + (task.getId()) + "   | " + task + "    | " + task.getPriority() ) ;
+            String deadline = task instanceof DeadlineTask ? ((DeadlineTask) task).getDueDateToString() : "n/a";
+            this.printMessage(" " + (task.getId()) + "   | " + task + "    | " + task.getPriority() + "    | " + deadline + "   | " + task.getCreatedAt());
         }
         this.printMessage("__________________________");
         this.printMessage(" ");
