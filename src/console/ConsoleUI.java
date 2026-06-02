@@ -1,7 +1,6 @@
 package console;
 
-import models.tasks.Task;
-import models.tasks.TaskManager;
+import apps.TaskManager;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -18,6 +17,7 @@ public class ConsoleUI {
         this.input = new Input(this.output);
         this.loadMainMenu();
         this.taskManager = new TaskManager(input, output);
+        this.taskManager.load();
     }
 
     public void main() {
@@ -29,6 +29,7 @@ public class ConsoleUI {
             );
 
             if (menuOptionSelected == 0) {
+                this.taskManager.persist();
                 this.output.printMessage("Exiting application .... ");
                 return;
             }

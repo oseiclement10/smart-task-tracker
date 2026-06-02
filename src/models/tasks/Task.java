@@ -3,9 +3,10 @@ package models.tasks;
 import enums.PriorityLevel;
 import enums.TaskStatus;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-abstract public class Task {
+abstract public class Task implements Serializable {
 
     private static int nextId = 1;
 
@@ -13,7 +14,7 @@ abstract public class Task {
     String title;
     String description;
     LocalDate createdAt;
-    TaskStatus status;
+    public TaskStatus status;
     PriorityLevel priority;
 
     Task(String title, String description, PriorityLevel priority) {

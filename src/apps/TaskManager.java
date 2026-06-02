@@ -1,10 +1,12 @@
-package models.tasks;
+package apps;
 
 import console.AddTask;
 import console.DeleteTask;
 import console.Input;
 import console.Output;
 import enums.TaskStatus;
+import models.tasks.SimpleTask;
+import models.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,12 +19,14 @@ public class TaskManager {
     ArrayList<Task> tasks;
     private final Input input;
     private final Output output;
+    private final TaskRepository repository;
 
     public TaskManager(Input inputHandler, Output outputHandler) {
 
         this.tasks = new ArrayList<>();
         this.input = inputHandler;
         this.output = outputHandler;
+        this.repository = new TaskRepository();
     }
 
     public void runCreateTask() {
@@ -81,5 +85,15 @@ public class TaskManager {
 
     public void sort(Comparator<Task> comparator) {
         this.tasks.sort(comparator);
+    }
+
+    public void persist() {
+        this.repository.save(this.tasks);
+    }
+
+    public void load() {
+        ArrayList<Task> storedTasks = this.repository.load();
+        this.tasks = storedTasks;
+        Task.setNextId(storedTasks.isEmpty() ? 1 : storedTasks.size() + 1);
     }
 }
