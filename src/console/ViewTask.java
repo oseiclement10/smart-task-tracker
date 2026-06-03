@@ -23,11 +23,12 @@ public class ViewTask {
 
     public void run() {
         while (true) {
-            this.output.printTaskList(this.taskManager.getAll(),"No tasks found" , null);
+
+            this.output.printTaskList(this.taskManager.getAll(), "No tasks found", null);
 
             printOptions();
             int menuOptionSelected = this.input.getIntInput(
-                    "Which action would you want to perform? Enter your choice : (1,2,3) ",
+                    "Which action would you want to perform? Enter your choice : (1,2,3) or 0 to exit ",
                     "[0-3]",
                     "input must be from 0 to 3"
             );
@@ -36,40 +37,27 @@ public class ViewTask {
                 return;
             }
 
-            boolean continueCreating = this.handleUserSelection(menuOptionSelected);
-            if (!continueCreating) {
-                output.printMessage("exiting ...");
-                return;
-            }
+            this.handleUserSelection(menuOptionSelected);
+
 
         }
 
 
     }
 
-    private boolean handleUserSelection(int menuOption) {
+    private void handleUserSelection(int menuOption) {
         switch (menuOption) {
             case 1 -> this.onSearchSelect();
 //            case 2 -> onTaskCreated.accept(createTask(TaskType.DEADLINE));
 //            case 3 -> onTaskCreated.accept(createTask(TaskType.RECURRING));
         }
 
-
-        String continueCreating = input.getStringInput(
-                "Option",
-                "Would you like to to go back to main menu",
-                "^(yes)|(no)$",
-                "Answer must be yes or no"
-        );
-
-        return continueCreating.equals("yes");
-
     }
 
 
     private void printOptions() {
-        this.output.printMessage("============TASKS LIST ===============");
-        this.output.printMessage(" ");
+        this.output.printMessage("============ ACTIONS ===============");
+
         Map<Integer, String> options = this.getViewActions();
 
         options.forEach((Integer key, String value) -> {
@@ -101,7 +89,7 @@ public class ViewTask {
                 );
                 this.output.printMessage("searching .... ");
                 ArrayList<Task> tasks = this.taskManager.getAll().stream()
-                        .filter(task -> task.getTitle().contains(keyword))
+                        .filter(task -> task.getTitle().toLowerCase().contains(keyword.toLowerCase()))
                         .collect(Collectors.toCollection(ArrayList::new));
 
                 Thread.sleep(600);
