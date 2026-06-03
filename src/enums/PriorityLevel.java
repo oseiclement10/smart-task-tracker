@@ -1,7 +1,8 @@
 package enums;
 
 public enum PriorityLevel {
-    HIGH,
+    LOW,
     MEDIUM,
-    LOW
+    HIGH
+
 }

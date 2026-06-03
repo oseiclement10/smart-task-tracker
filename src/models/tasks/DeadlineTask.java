@@ -17,9 +17,7 @@ public class DeadlineTask extends Task {
 
     }
 
-    public LocalDate getDueDate() {
-        return dueDate;
-    }
+
 
     public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
@@ -35,6 +33,12 @@ public class DeadlineTask extends Task {
         }
         return this.priority;
     }
+
+    @Override
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
 
     public String getDueDateToString() {
         return dueDate.toString();

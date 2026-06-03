@@ -45,8 +45,12 @@ abstract public class Task implements Serializable {
         return this.title ;
     }
 
-    public String getCreatedAt(){
-        return this.createdAt.toString();
+    public LocalDate getCreatedAt(){
+        return this.createdAt;
+    }
+
+    public LocalDate getDueDate(){
+        return null;
     }
 
 

@@ -1,6 +1,8 @@
 package apps;
 
 import console.*;
+import enums.SortDirection;
+import enums.TaskSortType;
 import enums.TaskStatus;
 import models.tasks.SimpleTask;
 import models.tasks.Task;
@@ -78,8 +80,39 @@ public class TaskManager {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public void sort(Comparator<Task> comparator) {
-        this.tasks.sort(comparator);
+    public ArrayList<Task> sort(TaskSortType type, SortDirection direction) {
+        boolean isDescending = direction == SortDirection.DESCENDING;
+        switch (type) {
+            case TaskSortType.DUEDATE -> {
+                Comparator<Task> comparator = Comparator.comparing(
+                        Task::getDueDate,
+                        Comparator.nullsLast(Comparator.naturalOrder())
+                );
+                if (isDescending) {
+                    comparator = comparator.reversed();
+                }
+                this.tasks.sort(comparator);
+
+            }
+
+            case TaskSortType.PRIORITY -> {
+                Comparator<Task> comparator = Comparator.comparing((Task::getPriority));
+                if (isDescending) {
+                    comparator = comparator.reversed();
+                }
+                this.tasks.sort(comparator);
+            }
+
+            case TaskSortType.CREATEDAT -> {
+                Comparator<Task> comparator = Comparator.comparing(Task::getCreatedAt);
+                if (isDescending) {
+                    comparator = comparator.reversed();
+                }
+                this.tasks.sort(comparator);
+
+            }
+        }
+        return this.tasks;
     }
 
     public void persist() {

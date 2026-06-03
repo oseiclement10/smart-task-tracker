@@ -20,28 +20,34 @@ public class ConsoleUI {
         this.loadMainMenu();
         this.taskManager = new TaskManager(input, output);
         this.taskManager.load();
-        this.reminder = new Reminder(taskManager,output);
+        this.reminder = new Reminder(taskManager, output);
     }
 
-    public void startReminder(){
+    public void startReminder() {
         this.reminder.activate();
     }
 
-    public void main() {
-        while (true) {
-            printMainMenu();
-            int menuOptionSelected = this.input.getIntInput("Enter your choice : ",
-                    "[0-4]",
-                    "from 0 to 4"
-            );
+    public void main(Thread reminderThread) {
+        try {
+            while (true) {
+                printMainMenu();
+                int menuOptionSelected = this.input.getIntInput("Enter your choice : ",
+                        "[0-4]",
+                        "from 0 to 4"
+                );
 
-            if (menuOptionSelected == 0) {
-                this.taskManager.persist();
-                this.output.printMessage("Exiting application .... ");
-                return;
+                if (menuOptionSelected == 0) {
+                    this.taskManager.persist();
+                    this.output.printMessage("Exiting application .... ");
+                    reminderThread.join();
+                    return;
+                }
+                this.handleUserSelection(menuOptionSelected);
             }
-            this.handleUserSelection(menuOptionSelected);
+        } catch (InterruptedException interruptedException) {
+            System.out.println("An interruption occurred in main console ");
         }
+
 
     }
 
