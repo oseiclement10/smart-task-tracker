@@ -7,10 +7,7 @@ import enums.TaskStatus;
 import models.tasks.SimpleTask;
 import models.tasks.Task;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -78,6 +75,10 @@ public class TaskManager {
         Pattern pattern = Pattern.compile(searchInput, Pattern.CASE_INSENSITIVE);
         return this.tasks.stream().filter(task -> pattern.matcher(task.getTitle()).find())
                 .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public Optional<Task> findByTaskId(int id) {
+        return this.tasks.stream().filter(t -> t.getId() == id).findFirst();
     }
 
     public void sort(TaskSortType type, SortDirection direction) {

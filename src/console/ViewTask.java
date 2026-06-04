@@ -1,15 +1,17 @@
 package console;
 
 import apps.TaskManager;
+import enums.PriorityLevel;
 import enums.SortDirection;
 import enums.TaskSortType;
 import enums.TaskType;
+import models.tasks.DeadlineTask;
+import models.tasks.RecurringTask;
 import models.tasks.Task;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -32,9 +34,9 @@ public class ViewTask {
             printOptions("ACTIONS", this.getViewActions());
 
             int menuOptionSelected = this.input.getIntInput(
-                    "Which action would you want to perform? Enter your choice : (1,2,3) or 0 to exit ",
-                    "[0-3]",
-                    "input must be from 0 to 3"
+                    "Which action would you want to perform? Enter your choice : (1,2,3,4) or 0 to exit ",
+                    "[0-4]",
+                    "input must be from 0 to 4"
             );
             if (menuOptionSelected == 0) {
                 this.output.printMessage("Going back to main menu .... ");
@@ -44,6 +46,7 @@ public class ViewTask {
             switch (menuOptionSelected) {
                 case 1 -> this.onSearchSelect();
                 case 2 -> this.onSortSelect();
+                case 4 -> this.onEditTask();
                 //            case 3 -> onTaskCreated.accept(createTask(TaskType.RECURRING));
             }
 
@@ -70,6 +73,7 @@ public class ViewTask {
         menu.put(1, "Search Tasks");
         menu.put(2, "Sort Tasks");
         menu.put(3, "Filter Tasks");
+        menu.put(4, "Edit Tasks");
         menu.put(0, "Exit");
         return menu;
     }
@@ -148,11 +152,114 @@ public class ViewTask {
 
     }
 
+    private void onEditTask() {
+
+        this.output.printTaskList(this.taskManager.getAll(), "No tasks found", null);
+
+        int taskId = this.input.getIntInput("Enter id of task you wish to edit ", "[1-9]+", "ID must be a number");
+        Optional<Task> taskExist = this.taskManager.findByTaskId(taskId);
+        if (taskExist.isEmpty()) {
+            this.output.printMessage("ID entered is not a valid task id ");
+            return;
+        }
+
+        this.printOptions("Available Edit Options ", this.getEditOptions(taskExist.get()));
+
+        int taskFieldId = input.getIntInput(
+                "which part of this task do you wish to edit ? ",
+                "[1-5]",
+                "entered value must be a number and not more than 5"
+        );
+
+        updateTaskField(taskExist.get(), taskFieldId);
+
+    }
+
+    private void updateTaskField(Task task, int fieldKey) {
+        Map<Integer, String> fieldOptions = this.getEditOptions(task);
+        String fieldName = fieldOptions.get(fieldKey);
+        if (fieldName == null)
+            throw new IllegalArgumentException("This edit option is not applicable to this task type");
+        switch (fieldName) {
+            case "Title":
+                String title = input.getStringInput(
+                        "Title",
+                        "Enter title of task : ",
+                        "[A-Za-z0-9 ]{4,}$",
+                        "Title must contain only letters and numbers and be at least 4 characters long."
+                );
+                task.setTitle(title);
+                break;
+
+            case "Description":
+                String description = input.getStringInput(
+                        "Description",
+                        "Enter description of tasks : ",
+                        "[A-Za-z0-9 ]{4,}$",
+                        "Description must contain only letters and numbers and be at least 4 characters long."
+                );
+                task.setDescription(description);
+                break;
+
+            case "Priority":
+                String priorityStr = input.getStringInput(
+                        "Priority (high or low or medium)",
+                        "Enter priority (high or low or medium) ",
+                        "^(high)|(low)|(medium)$",
+                        "Priority Must be either high, low or medium "
+                );
+
+                PriorityLevel priority = PriorityLevel.valueOf(priorityStr.toUpperCase());
+                task.setPriority(priority);
+                break;
+
+            case "Due Date":
+
+                if (task instanceof DeadlineTask) {
+                    LocalDateTime dueDate = input.getDateTimeInput(
+                            "Due date",
+                            "Enter due date here. (Date should be in the format yyyy-mm-dd hh:mm)"
+                    );
+
+                    ((DeadlineTask) task).setDueDate(dueDate);
+                } else {
+                    throw new IllegalArgumentException("Cannot update due date of non due date bound task ");
+                }
+                break;
+
+            case "Recurring Days Interval":
+                if (!(task instanceof RecurringTask))
+                    throw new IllegalArgumentException("Cannot update re occurring days interval for non re occuring task ");
+                int recurringDays = input.getIntInput(
+                        "Enter number of days it takes to reoccur",
+                        "^[1-9]+",
+                        "Must be a number"
+                );
+                ((RecurringTask) task).setRecurrenceIntervalDays(recurringDays);
+                break;
+        }
+    }
+
     private Map<Integer, String> getSortOptions() {
         Map<Integer, String> sortFieldsMenu = new LinkedHashMap<>();
         sortFieldsMenu.put(1, "Due Date");
         sortFieldsMenu.put(2, "Priority");
         sortFieldsMenu.put(3, "Date Created");
+        sortFieldsMenu.put(0, "Exit");
+        return sortFieldsMenu;
+    }
+
+    private Map<Integer, String> getEditOptions(Task task) {
+        Map<Integer, String> sortFieldsMenu = new LinkedHashMap<>();
+        sortFieldsMenu.put(1, "Title");
+        sortFieldsMenu.put(2, "Description");
+        sortFieldsMenu.put(3, "Priority");
+        if (task instanceof DeadlineTask) {
+            sortFieldsMenu.put(4, "Due Date");
+        }
+        if (task instanceof RecurringTask) {
+            sortFieldsMenu.put(5, "Recurring Days Interval");
+        }
         sortFieldsMenu.put(0, "Exit");
         return sortFieldsMenu;
     }

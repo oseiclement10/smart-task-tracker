@@ -43,15 +43,20 @@ abstract public class Task implements Serializable {
         return this.title;
     }
 
-    public void setTitle(String title){
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    public void setDescription(String description){
+    public void setPriority(PriorityLevel priorityLevel) {
+        this.priority = priorityLevel;
+    }
+
+
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public String getDescription(){
+    public String getDescription() {
         return this.description;
     }
 
@@ -66,6 +71,8 @@ abstract public class Task implements Serializable {
     public LocalDateTime getDueDate() {
         return null;
     }
+
+
 
 
 }
