@@ -7,6 +7,7 @@ import models.tasks.Task;
 import enums.PriorityLevel;
 import enums.TaskType;
 
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -45,7 +46,7 @@ public class AddTask {
     }
 
     private Task createTask(TaskType taskType) {
-        String dueDate = "";
+        LocalDateTime dueDate = null;
         int recurringDays = 0;
 
         String title = input.getStringInput(
@@ -72,11 +73,9 @@ public class AddTask {
         PriorityLevel priority = PriorityLevel.valueOf(priorityStr.toUpperCase());
 
         if (taskType == TaskType.DEADLINE || taskType == TaskType.RECURRING) {
-            dueDate = input.getStringInput(
+            dueDate = input.getDateTimeInput(
                     "Due date",
-                    "Enter Due date here , must be in the format (yyyy-MM-dd)",
-                    "[0-9]{4}-[0-9]{2}-[0-9]{2}",
-                    "yyyy-mm-dd"
+                    "Enter due date here. (Date should be in the format yyyy-mm-dd hh:mm)"
             );
         }
 

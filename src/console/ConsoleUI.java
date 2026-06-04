@@ -39,6 +39,7 @@ public class ConsoleUI {
                 if (menuOptionSelected == 0) {
                     this.taskManager.persist();
                     this.output.printMessage("Exiting application .... ");
+                    reminderThread.interrupt();
                     reminderThread.join();
                     return;
                 }

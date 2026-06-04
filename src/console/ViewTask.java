@@ -117,7 +117,7 @@ public class ViewTask {
         try {
             while (true) {
                 this.printOptions("Sort Options ", this.getSortOptions());
-                int sortType = this.input.getIntInput("what would you like to sort by", "^[0-2]$", "Must be a number,either 1 or 2");
+                int sortType = this.input.getIntInput("what would you like to sort by (1-3) ", "^[0-3]$", "Must be a number,either 1 or 2 or 3");
                 this.printOptions("Sort Direction", this.getSortDirections());
                 int sortSortDirection = this.input.getIntInput("choose sort direction", "^[0-2]$", "Must be a number,either 1 or 2");
 

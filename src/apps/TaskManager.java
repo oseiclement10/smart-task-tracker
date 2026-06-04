@@ -80,7 +80,7 @@ public class TaskManager {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public ArrayList<Task> sort(TaskSortType type, SortDirection direction) {
+    public void sort(TaskSortType type, SortDirection direction) {
         boolean isDescending = direction == SortDirection.DESCENDING;
         switch (type) {
             case TaskSortType.DUEDATE -> {
@@ -112,7 +112,7 @@ public class TaskManager {
 
             }
         }
-        return this.tasks;
+
     }
 
     public void persist() {

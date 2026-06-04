@@ -1,5 +1,8 @@
 package console;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -56,6 +59,30 @@ public class Input {
             output.printMessage(validationError.get());
 
         }
+
+    }
+
+    public LocalDateTime getDateTimeInput(String fieldName, String label) {
+
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+        while (true) {
+            String dueDate = this.getStringInput(
+                    fieldName,
+                    label,
+                    "[0-9]{4}-[0-9]{2}-[0-9]{2} ([01][0-9]|2[0-3]):[0-5][0-9]",
+                    "Date should be in the format yyyy-MM-dd HH:mm"
+            );
+
+            try {
+                return LocalDateTime.parse(dueDate, formatter);
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid date. Date should be in the format yyyy-MM-dd HH:mm " );
+            }
+
+        }
+
 
     }
 

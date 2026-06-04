@@ -5,15 +5,17 @@ import enums.TaskStatus;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 abstract public class Task implements Serializable {
 
     private static int nextId = 1;
+    private static final long serialVersionUID = 1L;
 
     int id;
-    String title;
-    String description;
-    private LocalDate createdAt;
+    private String title;
+    private String description;
+    private final LocalDateTime createdAt;
     public TaskStatus status;
     PriorityLevel priority;
 
@@ -21,7 +23,7 @@ abstract public class Task implements Serializable {
         this.id = nextId;
         this.title = title;
         this.description = description;
-        this.createdAt = LocalDate.now();
+        this.createdAt = LocalDateTime.now();
         this.status = TaskStatus.TODO;
         this.priority = priority;
         nextId++;
@@ -41,15 +43,27 @@ abstract public class Task implements Serializable {
         return this.title;
     }
 
-    public String toString() {
-        return this.title ;
+    public void setTitle(String title){
+        this.title = title;
     }
 
-    public LocalDate getCreatedAt(){
+    public void setDescription(String description){
+        this.description = description;
+    }
+
+    public String getDescription(){
+        return this.description;
+    }
+
+    public String toString() {
+        return this.title;
+    }
+
+    public LocalDateTime getCreatedAt() {
         return this.createdAt;
     }
 
-    public LocalDate getDueDate(){
+    public LocalDateTime getDueDate() {
         return null;
     }
 

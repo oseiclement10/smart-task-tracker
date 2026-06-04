@@ -1,25 +1,26 @@
 package models.tasks;
 
+import console.Output;
 import enums.PriorityLevel;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 public class DeadlineTask extends Task {
 
-    private LocalDate dueDate;
+    private LocalDateTime dueDate;
 
 
-    public DeadlineTask(String title, String description, PriorityLevel priority, String dueDate) {
+    public DeadlineTask(String title, String description, PriorityLevel priority, LocalDateTime dueDate) {
         super(title, description, priority);
-        this.dueDate = this.stringToDate(dueDate);
-
+        this.dueDate = dueDate;
     }
 
 
 
-    public void setDueDate(LocalDate dueDate) {
+    public void setDueDate(LocalDateTime dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -35,17 +36,12 @@ public class DeadlineTask extends Task {
     }
 
     @Override
-    public LocalDate getDueDate() {
+    public LocalDateTime getDueDate() {
         return dueDate;
     }
 
 
-    public String getDueDateToString() {
-        return dueDate.toString();
-    }
 
-    private LocalDate stringToDate(String dateInput) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return LocalDate.parse(dateInput, formatter);
-    }
+
+
 }
