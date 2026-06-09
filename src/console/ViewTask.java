@@ -46,6 +46,7 @@ public class ViewTask {
             switch (menuOptionSelected) {
                 case 1 -> this.onSearchSelect();
                 case 2 -> this.onSortSelect();
+                case 3 -> this.onFilterTask();
                 case 4 -> this.onEditTask();
 
             }
@@ -72,7 +73,7 @@ public class ViewTask {
         Map<Integer, String> menu = new LinkedHashMap<>();
         menu.put(1, "Search Tasks");
         menu.put(2, "Sort Tasks");
-        menu.put(3, "Filter Tasks");
+        menu.put(3, "Filter Tasks By Priority");
         menu.put(4, "Edit Tasks");
         menu.put(0, "Exit");
         return menu;
@@ -204,6 +205,41 @@ public class ViewTask {
 
     }
 
+    private void onFilterTask() {
+        try {
+            while (true) {
+                String priorityStr = input.getStringInput(
+                        "Priority (high or low or medium)",
+                        "Enter priority you would want to filter by (high or low or medium). (enter 0 to quit) ",
+                        "^(high)|(low)|(medium)|(0)$",
+                        "Priority Must be either high, low or medium "
+                );
+
+                if (priorityStr.equals("0")) return;
+
+                this.output.printMessage("filtering ... ");
+                Thread.sleep(600);
+
+                PriorityLevel priorityLevel = PriorityLevel.valueOf(priorityStr.toUpperCase());
+
+                this.output.printTaskList(this.taskManager.filterByPriority(priorityLevel), "no tasks found ", "Filtering Results");
+
+                String continueSearching = input.getStringInput(
+                        "Option",
+                        "Would you like to continue filtering (yes or no)",
+                        "^(yes)|(no)$",
+                        "Answer must be yes or no"
+                );
+
+                if (continueSearching.equals("no")) return;
+
+
+            }
+        } catch (InterruptedException exception) {
+            this.output.printMessage("Interrupt exception occurred during sorting");
+        }
+    }
+
 
     private void updateTaskField(Task task, int fieldKey) {
         Map<Integer, String> fieldOptions = this.getEditOptions(task);
@@ -312,5 +348,6 @@ public class ViewTask {
         sortFieldsMenu.put(0, "Go Back");
         return sortFieldsMenu;
     }
+
 
 }

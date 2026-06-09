@@ -1,6 +1,7 @@
 package apps;
 
 import console.*;
+import enums.PriorityLevel;
 import enums.SortDirection;
 import enums.TaskSortType;
 import enums.TaskStatus;
@@ -57,6 +58,12 @@ public class TaskManager {
     public ArrayList<Task> filterByStatus(TaskStatus status) {
         return this.tasks.stream()
                 .filter(task -> task.status == status)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public ArrayList<Task> filterByPriority(PriorityLevel level) {
+        return this.tasks.stream()
+                .filter(task -> task.getPriority() == level)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -122,8 +129,11 @@ public class TaskManager {
 
     public void load() {
         ArrayList<Task> storedTasks = this.repository.load();
-        this.tasks = storedTasks;
-        Task.setNextId(storedTasks.isEmpty() ? 1 : storedTasks.size() + 1);
+        if (!storedTasks.isEmpty()) {
+            this.tasks = storedTasks;
+            int nextId = storedTasks.stream().mapToInt(Task::getId).max().orElse(1);
+            Task.setNextId(nextId + 1);
+        }
     }
 
 

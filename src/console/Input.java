@@ -50,7 +50,7 @@ public class Input {
             Optional<String> validationError = InputValidator.validateNotEmpty(input, fieldName);
 
             if (validationError.isEmpty()) {
-                validationError = InputValidator.validateByPattern(input, validatingRegex, errorMessage);
+                validationError = InputValidator.validateByPattern(input.toLowerCase(), validatingRegex, errorMessage);
                 if (validationError.isEmpty()) {
                     return input;
                 }
@@ -78,7 +78,7 @@ public class Input {
             try {
                 return LocalDateTime.parse(dueDate, formatter);
             } catch (DateTimeParseException e) {
-                System.out.println("Invalid date. Date should be in the format yyyy-MM-dd HH:mm " );
+                System.out.println("Invalid date. Date should be in the format yyyy-MM-dd HH:mm ");
             }
 
         }
