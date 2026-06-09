@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 public class Output {
     private final PrintStream out;
+    private  static final String spacing = "%-5s | %-30s | %-45s | %-15s | %-20s | %-20s%n";
 
     public Output() {
         out = System.out;
@@ -30,12 +31,12 @@ public class Output {
             this.printMessage(headerMessage);
         }
 
-        final String  spacing = "%-5s | %-30s | %-45s | %-15s | %-20s | %-20s%n";
+
 
         this.printMessage("=".repeat(60) + " TASKS LIST " + "=".repeat(60));
         this.printMessage(" ");
 
-        System.out.printf(spacing, "ID", "Title","DESCRIPTION", "PRIORITY", "DEADLINE", "CREATED AT");
+        System.out.printf(spacing, "ID", "Title", "DESCRIPTION", "PRIORITY", "DEADLINE", "CREATED AT");
 
         this.printMessage("-".repeat(150));
         for (Task task : tasks) {
@@ -52,6 +53,23 @@ public class Output {
         }
         this.printMessage("-".repeat(150));
     }
+
+    public void printTask(Task task) {
+        this.out.println("TASK DETAILS");
+        this.printMessage("-".repeat(150));
+        String deadline = formatDateTime(task.getDueDate());
+        String createdAt = formatDateTime(task.getCreatedAt());
+        System.out.printf(spacing,
+                task.getId(),
+                task.getTitle(),
+                task.getDescription(),
+                task.getPriority(),
+                deadline,
+                createdAt
+        );
+        this.printMessage("-".repeat(150));
+    }
+
 
     public static String formatDateTime(LocalDateTime localDateTime) {
         if (localDateTime == null) {
