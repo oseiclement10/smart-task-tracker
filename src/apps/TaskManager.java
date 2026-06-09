@@ -42,7 +42,7 @@ public class TaskManager {
     }
 
     public void runExportTask() {
-        try{
+        try {
             TaskExport taskExporter = new TaskExport();
             this.output.printMessage("Exporting .... ");
             Thread.sleep(900);
