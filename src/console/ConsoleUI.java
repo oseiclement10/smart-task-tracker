@@ -73,6 +73,7 @@ public class ConsoleUI {
                 this.taskManager.runDeleteTasks();
                 break;
             case 4:
+                this.taskManager.runExportTask();
                 break;
         }
     }

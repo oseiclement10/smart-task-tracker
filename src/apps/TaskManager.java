@@ -41,6 +41,23 @@ public class TaskManager {
         taskDeleter.run(this::bulkRemoveTasks, this.tasks);
     }
 
+    public void runExportTask() {
+        try{
+            TaskExport taskExporter = new TaskExport();
+            this.output.printMessage("Exporting .... ");
+            Thread.sleep(900);
+            taskExporter.exportTasks(this.tasks);
+
+            this.output.printMessage("Tasks exported successfully !");
+            this.output.printMessage("-".repeat(50));
+            this.output.printMessage(" ");
+
+        } catch (Exception e) {
+            this.output.printMessage("something went wrong during export " + e.getMessage());
+        }
+
+    }
+
     public void addTask(Task task) {
         tasks.add(task);
     }
@@ -78,11 +95,6 @@ public class TaskManager {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public ArrayList<Task> searchByRegex(String searchInput) {
-        Pattern pattern = Pattern.compile(searchInput, Pattern.CASE_INSENSITIVE);
-        return this.tasks.stream().filter(task -> pattern.matcher(task.getTitle()).find())
-                .collect(Collectors.toCollection(ArrayList::new));
-    }
 
     public Optional<Task> findByTaskId(int id) {
         return this.tasks.stream().filter(t -> t.getId() == id).findFirst();

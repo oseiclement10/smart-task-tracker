@@ -1,5 +1,7 @@
 package models.tasks;
 
+import apps.TaskExport;
+import console.Output;
 import enums.PriorityLevel;
 import enums.TaskStatus;
 
@@ -64,6 +66,18 @@ abstract public class Task implements Serializable {
         return this.title;
     }
 
+    public String toCsv() {
+        String recurringInterval = this instanceof RecurringTask ? String.valueOf(((RecurringTask) this).getRecurrenceIntervalDays()) : "n/a";
+
+        return this.id + "," +
+                TaskExport.escape(this.title) + "," +
+                TaskExport.escape(this.description) + "," +
+                Output.formatDateTime(this.getDueDate()) + "," +
+                this.priority.toString() + "," +
+                recurringInterval + "," +
+                 Output.formatDateTime(this.getDueDate());
+    }
+
     public LocalDateTime getCreatedAt() {
         return this.createdAt;
     }
@@ -71,8 +85,6 @@ abstract public class Task implements Serializable {
     public LocalDateTime getDueDate() {
         return null;
     }
-
-
 
 
 }
