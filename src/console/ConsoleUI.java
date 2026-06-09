@@ -27,8 +27,8 @@ public class ConsoleUI {
         this.reminder.activate();
     }
 
-    public void main(Thread reminderThread) {
-        try {
+    public void main() {
+
             while (true) {
                 printMainMenu();
                 int menuOptionSelected = this.input.getIntInput("Enter your choice : ",
@@ -39,15 +39,11 @@ public class ConsoleUI {
                 if (menuOptionSelected == 0) {
                     this.taskManager.persist();
                     this.output.printMessage("Exiting application .... ");
-                    reminderThread.interrupt();
-                    reminderThread.join();
                     return;
                 }
                 this.handleUserSelection(menuOptionSelected);
             }
-        } catch (InterruptedException interruptedException) {
-            System.out.println("An interruption occurred in main console ");
-        }
+
 
 
     }

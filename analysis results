@@ -1,0 +1,52 @@
+# SmartTasker Implementation Analysis
+
+I have reviewed your implementation of the `SmartTasker` project and compared it against the requirements outlined in `Java_Practice_Projects.docx`. You have built a solid foundation with functional CRUD operations, basic file I/O serialization, and an interactive CLI. 
+
+However, there are several key areas where the implementation deviates from the core requirements or can be improved. Here is a detailed breakdown of the feedback.
+
+## 1. Class Architecture & Generics
+> [!IMPORTANT]
+> The requirements explicitly specify that `TaskManager` must be a **generic class** `TaskManager<T extends Task>`.
+
+- **Current Implementation:** Your `TaskManager` uses a raw `ArrayList<Task>` and is not generic.
+- **Improvement:** Update the class definition to `public class TaskManager<T extends Task>` and replace `ArrayList<Task>` with `ArrayList<T>`. This exercises Java Generics correctly as requested by the project.
+
+## 2. Identifier Types (UUID vs Integers)
+- **Current Implementation:** You are using a static incrementing integer (`int id`) to track task IDs. 
+- **Improvement:** The requirements mandate an **auto-generated `UUID`** for each task. You should change the ID field to `java.util.UUID` and generate it using `UUID.randomUUID()` in the `Task` constructor.
+
+## 3. Background Threads & Synchronization
+> [!WARNING]
+> Your `Reminder` thread currently prevents the application from exiting naturally. 
+
+- **Current Implementation:** In `Main.java`, you start the thread but do not mark it as a daemon thread. In `Reminder.java`, the thread loops using `while (!Thread.currentThread().isInterrupted())` and fetches all tasks via `taskManager.getAll()`.
+- **Improvement:** 
+  1. Call `reminderThread.setDaemon(true)` before starting it. This ensures the JVM will gracefully shut down when the main `ConsoleUI` thread terminates, eliminating the need to explicitly interrupt the thread on exit.
+  2. Implement proper synchronization. The requirements ask for **synchronized access** to the task list on each tick. Add a synchronized method in `TaskManager` that handles the iteration, or wrap the list traversal in a `synchronized` block to prevent `ConcurrentModificationException` without needing to copy the entire array every minute.
+
+## 4. Search and Filtering
+- **Regex Search:** The project requires a full-text search across **both task titles and descriptions** using `java.util.regex.Pattern` and `Matcher`. Your `ViewTask.onSearchSelect()` only uses `String.contains()` on the title. You should refactor this to compile a regex pattern that supports partial, case-insensitive matches (`Pattern.compile(keyword, Pattern.CASE_INSENSITIVE)`).
+- **Tags Filtering:** While you implemented `filterByTag` in `TaskManager`, there is no menu option in `ViewTask` to actually use this filter. The UI only allows filtering by priority.
+
+## 5. Advanced Sorting
+> [!TIP]
+> Use `Comparator.comparing().thenComparing()` to clean up your sorting logic.
+
+- **Current Implementation:** `TaskManager.sort()` uses a `switch` statement with individual comparators for due date, priority, and creation date. 
+- **Improvement:** The requirements specifically recommend chaining sort keys. For example, sorting by due date should fallback to priority for tasks with the same deadline:
+  ```java
+  Comparator<Task> comp = Comparator.comparing(Task::getDueDate, Comparator.nullsLast(Comparator.naturalOrder()))
+                                    .thenComparing(Task::getPriority);
+  ```
+
+## 6. Summary Statistics Dashboard
+- **Current Implementation:** Missing entirely.
+- **Improvement:** Implement a `stats` dashboard command that prints out the total tasks, completion rate (%), overdue count, and task-count breakdown per category.
+
+## 7. CSV Export Format
+- **Current Implementation:** Your `TaskExport` outputs columns: `ID, Title, Description, DueDate, Priority, Interval Days, Date Created`. 
+- **Improvement:** The required columns are: `ID, Title, Category, Priority, Status, DueDate`. Update the `Task.toCsv()` methods to match this exact schema. You'll also need to ensure the `Status` field is correctly represented in the output.
+
+## 8. Object-Oriented Design & Encapsulation
+- **Current Implementation:** Fields in `Task.java` like `status`, `id`, and `priority` are declared with package-private visibility (or public). 
+- **Improvement:** Enforce strict encapsulation. Make all fields `private` (or `protected` if strictly needed by subclasses) and expose them strictly via getters and setters.
